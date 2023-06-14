@@ -5,16 +5,19 @@
 #include <iostream>
 #include <map>
 #include <list>
+#include <stack>
 using namespace std;
 
 class graph {
     
     int V;
     map<int, list<int>> adj;
-    
+    map<int, bool> visited;
+    stack<int> box;
     public:
         void addEdge(int v, int w);
-        void bfs(int v);
+        void dfs(int v);
+        void display();
     
 };
 
@@ -22,28 +25,34 @@ void graph :: addEdge(int v, int w) {
     adj[v].push_back(w);
 }
 
-void graph :: bfs(int s) {
+void graph :: dfs(int s) {
     int x;
-    map<int, bool> visited;
-    list<int> queue;
-    visited[s] = true;
-    queue.push_back(s);
     
-    while(!queue.empty()) {
-        
-        s = queue.front();
-        cout<<s<<" ";
-        queue.pop_front();
-        
-        while(!adj[s].empty()) {
-            x = adj[s].front();
-            if(!visited[x]) {
-                visited[x] = true;
-                queue.push_back(x);
-            }
-            adj[s].pop_front();
+    visited[s] = true;
+    box.push(s);
+    
+    while(!adj[s].empty()) {
+        x = adj[s].front();
+        if(!visited[x]) {
+            dfs(x);
         }
-        
+        adj[s].pop_front();
+    }
+    
+}
+
+void graph :: display() {
+    
+    stack<int> stack;
+    
+    while (!box.empty()) {
+        stack.push(box.top());
+        box.pop();
+    }
+    
+    while(!stack.empty()) {
+        cout<<stack.top()<<" ";
+        stack.pop();
     }
     
 }
@@ -55,7 +64,7 @@ int main()
     
     while(true) {
         
-        cout<<"1. Add Edge\n2. Show BFS Traversal\n3. Exit\nYour Choice: ";
+        cout<<"1. Add Edge\n2. Show DFS Traversal\n3. Exit\nYour Choice: ";
         cin>>oper;
         
         switch(oper) {
@@ -70,8 +79,9 @@ int main()
             case 2:
             cout<<"Start traversal from: ";
             cin>>x;
-            cout<<endl<<"Breadth First Traversal of the graph from "<<x<<" is: ";
-            g.bfs(x);
+            cout<<endl<<"Depth First Traversal of the graph from "<<x<<" is: ";
+            g.dfs(x);
+            g.display();
             cout<<endl<<endl;
             break;
             
