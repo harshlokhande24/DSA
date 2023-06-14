@@ -30,7 +30,6 @@ int main()
     
     sort(begin(pr), end(pr), greater<int>());
     
-    map<int, int> :: iterator it = knap.begin();
     cout<<"----------------------"<<endl;
     i=0;
     while (knap[sack[pr[i]]] < W) {
